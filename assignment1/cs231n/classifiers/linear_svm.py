@@ -28,13 +28,18 @@ def svm_loss_naive(W, X, y, reg):
   for i in range(num_train):
     scores = X[i].dot(W)
     correct_class_score = scores[y[i]]
+    count = 0
     for j in range(num_classes):
       if j == y[i]:
         continue
       margin = scores[j] - correct_class_score + 1 # note delta = 1
       if margin > 0:
         loss += margin
+        # derivative for incorrect classes
         dW[:, j] += X[i]
+        count += 1
+    # derivative for correct classes
+    dW[:, y[i]] -= count * X[i] 
         
 
   # Right now the loss is a sum over all training examples, but we want it
@@ -47,7 +52,6 @@ def svm_loss_naive(W, X, y, reg):
 
 
   #############################################################################
-  # TODO:                                                                     #
   # Compute the gradient of the loss function and store it dW.                #
   # Rather that first computing the loss and then computing the derivative,   #
   # it may be simpler to compute the derivative at the same time that the     #
@@ -73,7 +77,7 @@ def svm_loss_vectorized(W, X, y, reg):
   # Implement a vectorized version of the structured SVM loss, storing the    #
   # result in loss.                                                           #
   #############################################################################
-  pass
+  
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
